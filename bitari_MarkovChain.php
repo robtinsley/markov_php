@@ -13,9 +13,13 @@ class bitari_MarkovChain #
 		if ( is_integer( $arg ) && $arg >= 0 ) {
 			$this->order = $arg;
 		} elseif ( is_string( $arg ) && substr( $arg, 0, strlen( self::_STATE_HEADER ) + 1 ) === self::_STATE_HEADER . '~' ) {
-			$this->set_state_string( $arg );
+			if ( $this->set_state_string( $arg ) !== true ) {
+				throw new Exception( 'Bad state-string in ' . __CLASS__ . ' constructor' );
+			}
 		} elseif ( is_string( $arg ) ) {
-			$this->load_state_file( $arg );
+			if ( $this->load_state_file( $arg ) !== true ) {
+				throw new Exception( 'Bad state-file in ' . __CLASS__ . ' constructor' );
+			}
 		} else {
 			throw new Exception( 'Bad argument in ' . __CLASS__ . ' constructor' );
 		}
